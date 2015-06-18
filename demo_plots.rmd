@@ -1,0 +1,80 @@
+---
+title: StataKnitr Demo with Plots
+output: 
+  html_document:
+    css: custom.css
+params:
+  dpi: 150
+---
+
+```{r, echo = FALSE, message = FALSE}
+## libraries
+require(knitr)
+
+## R source
+source('stataknitrhelper.r')
+
+## set chunk options
+opts_chunk$set(echo = FALSE, message = FALSE, comment = NA)
+
+## set yaml params in environment
+Sys.setenv(dpi = params$dpi)
+```
+
+```{r, engine = 'bash'}
+## run accompanying .do file to get log file for parsing
+## NB: depending on Stata flavor, may need to change first command
+stata -b -q do demo_plots.do
+
+## convert plots used in this file to png
+plotlist=(*.eps)
+for i in ${plotlist[@]};
+do
+base=${i%.eps}
+convert -density $dpi -flatten $base.eps $base.png;
+done
+```
+
+```{r}
+## save log file in object
+lf <- 'demo_plots.log'
+```
+
+# Load data
+
+```{r}
+start <- 'load in data'
+end <- 'create histogram of years in residence with name; export to file'
+writeLines(logparse(lf, start = start, end = end))
+```
+
+<br>
+
+# Histogram
+
+```{r}
+start <- 'create histogram of years in residence with name; export to file'
+end <- 'create scatter of years by loginc; export to file'
+writeLines(logparse(lf, start = start, end = end))
+```
+
+```{r, results = 'asis'}
+writeLines(alignfigure('hist_years.png', 'center'))
+```
+
+<br>
+
+# Scatter plot
+
+```{r}
+start <- 'create scatter of years by loginc; export to file'
+end <- 'close log and exit'
+writeLines(logparse(lf, start = start, end = end))
+```
+
+```{r, results = 'asis'}
+writeLines(alignfigure('sc_yearsXloginc.png', 'center'))
+```
+
+<br>
+

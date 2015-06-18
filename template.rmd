@@ -1,0 +1,40 @@
+---
+title: Title
+output: 
+  html_document:
+    css: custom.css
+params:
+  dpi: 150
+---
+
+```{r, echo = FALSE, message = F
+
+## libraries
+require(knitr)
+
+## R source
+source('stataknitrhelper.r')
+
+## set chunk options
+opts_chunk$set(echo = FALSE, message = FALSE, comment = NA)
+
+## set yaml params in environment
+Sys.setenv(dpi = params$dpi)
+```
+
+```{r, engine = 'bash'}
+## run accompanying do file to get log file for parsing
+## NB: depending on Stata flavor, may need to change first command   
+stata -b -q do           # <- insert *.do file here
+```
+
+```{r}
+## save log file in object
+lf <-             # <- insert *.log here
+```
+
+```{r}
+start <-          # <- insert unique comment line start of chunk here
+end <-            # <- insert unique comment line end of chunk here
+writeLines(logparse(lf, start = start, end = end))
+```

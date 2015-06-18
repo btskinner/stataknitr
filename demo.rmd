@@ -1,0 +1,57 @@
+---
+title: StataKnitr Demo
+output: 
+  html_document:
+   css: custom.css
+---
+
+```{r, echo = FALSE, message = FALSE}
+## libraries
+require(knitr)
+
+## R source
+source('stataknitrhelper.r')
+
+## set chunk options
+opts_chunk$set(echo = FALSE, message = FALSE, comment = NA)
+```
+
+```{r, engine = 'bash'}
+## run accompanying .do file to get log file for parsing
+## NB: depending on Stata flavor, may need to change first command
+stata -b -q do demo.do	 
+```
+
+```{r}
+## save log file in object
+lf <- 'demo.log'
+```
+
+## Load data
+
+```{r}
+start <- 'load data'
+end <- 'create nominal income variable; summarize'
+writeLines(logparse(lf, start = start, end = end))
+```
+
+<br>
+
+## Create new variable and summarize
+
+```{r}
+start <- 'create nominal income variable; summarize'
+end <- 'list observations inc'
+writeLines(logparse(lf, start = start, end = end))
+```
+
+<br>
+
+## List observations (but only a few)
+
+```{r}
+start <- 'list observations inc'
+end <- 'close log and exit'
+writeLines(logparse(lf, start = start, end = end)[1:17])
+```
+

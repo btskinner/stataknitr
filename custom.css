@@ -1,0 +1,9 @@
+
+/* Make code output off-white */
+pre:not([class]) {
+    background-color: #F8F8F8;
+}
+
+pre {
+    background-color: #F8F8F8:
+}
