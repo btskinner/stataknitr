@@ -26,7 +26,7 @@ This method requires:
 
 It must run from top to bottom without error and save a log of the output. Also, every section that you want displayed should have a unique comment. `demo.do` is an example:
 
-```Stata
+```
 // log stata session with *.log file
 log using "demo.log", replace
 
@@ -50,7 +50,7 @@ exit
 
 After setting any knitr chunk options that you want, call your do file with a knitr chunk that uses `engine = 'bash'` in the options:
 
-```R
+```
 ## run accompanying .do file to get log file for parsing   
 stata -b -q do demo.do
 ```
@@ -62,7 +62,7 @@ stata -b -q do demo.do
 
 Store the log file in an object in the next knitr chunk:
 
-```R
+```
 ## save log file in object
 lf <- 'demo.log'
 ```
@@ -84,7 +84,7 @@ writeLines(logparse(lf, start = start, end = end))
 
 When called from the command line, Stata can only produce graphics in `*.ps` and `*.eps` format. I couldn't get rmarkdown to work with these files. To work around this, I include code at the beginning of the knitr document (in the BASH chunk just below the `stata ... ` call) that uses [ImageMagick](http://www.imagemagick.org/script/index.php) to convert the EPS files to PNG:
 
-```Shell
+```
 ## convert plots used in this file to png
 plotlist=(*.eps)
 for i in ${plotlist[@]};
@@ -108,7 +108,7 @@ To get files of different size, change the current density value of `150` to wha
 
 Make sure your do file exports images using the `graph export` command:
 
-```R
+```
 // create scatter of years by loginc; export to file
 scatter years loginc, name(sc_yearsXloginc)
 graph export "sc_yearsXloginc.eps", name(sc_yearsXloginc) replace
@@ -118,7 +118,7 @@ graph export "sc_yearsXloginc.eps", name(sc_yearsXloginc) replace
 
 Call the plot in the rmarkdown document either with the standard `![]` command or, if you want to align it, using `alignfigure()` wrapped in `writeLines()` and using the `results = 'asis'` chunk option. Here is an example using the `demo_plots.rmd`:
 
-```R
+```
 writeLines(alignfigure('sc_yearsXloginc.png', 'center'))
 ```
 
@@ -126,13 +126,13 @@ writeLines(alignfigure('sc_yearsXloginc.png', 'center'))
 
 To run, open an R session in the same directory as your RMD file and run `rmarkdown::render()`. Here's an example using `demo.rmd`:
 
-```r
+```
 rmarkdown::render('demo.rmd')
 ```
 
 If you want to change the size of the image, you need to pass the change in the `render` options:
 
-```r
+```
 rmarkdown::render('demo.rmd', params = list(dpi = 300))
 ```
 
