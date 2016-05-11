@@ -43,7 +43,8 @@ log close
 exit
 ```
 
-### Construct your knitr rmd file   
+### Construct your knitr rmd file  
+  
 #### Call do file  
 
 After setting any knitr chunk options that you want, call your do file with a knitr chunk that uses `engine = 'bash'` in the options:
