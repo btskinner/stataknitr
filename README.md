@@ -24,7 +24,7 @@ This method requires:
 
 It must run from top to bottom without error and save a log of the output. Also, every section that you want displayed should have a unique comment. `demo.do` is an example:
 
-```stata
+```
 // log stata session with *.log file
 log using "demo.log", replace
 
@@ -107,7 +107,7 @@ To get files of different size, change the current density value of `150` to wha
 
 Make sure your do file exports images using the `graph export` command:
 
-```stata
+```
 // create scatter of years by loginc; export to file
 scatter years loginc, name(sc_yearsXloginc)
 graph export "sc_yearsXloginc.eps", name(sc_yearsXloginc) replace
